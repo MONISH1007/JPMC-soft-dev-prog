@@ -1,5 +1,7 @@
 package com.jpmc.midascore;
 
+import com.jpmc.midascore.entity.UserRecord;
+import com.jpmc.midascore.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.kafka.test.context.EmbeddedKafka;
 import org.springframework.test.annotation.DirtiesContext;
+
+import java.util.List;
 
 @SpringBootTest
 @DirtiesContext
@@ -23,6 +27,9 @@ public class TaskThreeTests {
     @Autowired
     private FileLoader fileLoader;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
     void task_three_verifier() throws InterruptedException {
         userPopulator.populate();
@@ -32,6 +39,10 @@ public class TaskThreeTests {
         }
         Thread.sleep(2000);
 
+        List<UserRecord> users = (List<UserRecord>) userRepository.findAll();
+        for (UserRecord user : users) {
+            System.out.println("Name: " + user.getName() + " | Balance: " + user.getBalance());
+        }
 
         logger.info("----------------------------------------------------------");
         logger.info("----------------------------------------------------------");
@@ -43,4 +54,5 @@ public class TaskThreeTests {
             logger.info("...");
         }
     }
+
 }
