@@ -39,7 +39,7 @@ public class KafkaTransactionListener {
         Optional<UserRecord> senderOpt = userRepository.findById(senderId);
         Optional<UserRecord> recipientOpt = userRepository.findById(recipientId);
 
-        // ✅ Validate sender and recipient existence
+        // Validate sender and recipient existence
         if (senderOpt.isEmpty() || recipientOpt.isEmpty()) {
             System.out.println("Invalid sender or recipient. Discarding transaction.");
             return;
@@ -48,7 +48,7 @@ public class KafkaTransactionListener {
         UserRecord sender = senderOpt.get();
         UserRecord recipient = recipientOpt.get();
 
-        // ✅ Validate sender balance
+        // Validate sender balance
         if (sender.getBalance() < amount) {
             System.out.println("Insufficient balance. Discarding transaction.");
             return;
