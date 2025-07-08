@@ -41,7 +41,7 @@ public class KafkaTransactionListener {
 
         // ✅ Validate sender and recipient existence
         if (senderOpt.isEmpty() || recipientOpt.isEmpty()) {
-            System.out.println("❌ Invalid sender or recipient. Discarding transaction.");
+            System.out.println("Invalid sender or recipient. Discarding transaction.");
             return;
         }
 
@@ -50,11 +50,11 @@ public class KafkaTransactionListener {
 
         // ✅ Validate sender balance
         if (sender.getBalance() < amount) {
-            System.out.println("❌ Insufficient balance. Discarding transaction.");
+            System.out.println("Insufficient balance. Discarding transaction.");
             return;
         }
 
-        // ✅ Call Incentive API
+        // Call Incentive API
         Incentive incentiveResponse = restTemplate.postForObject(
                 "http://localhost:8080/incentive",
                 transaction,
@@ -62,17 +62,17 @@ public class KafkaTransactionListener {
         );
 
         float incentive = (incentiveResponse != null) ? incentiveResponse.getAmount() : 0.0f;
-        System.out.println("✅ Incentive received: " + incentive);
+        System.out.println("Incentive received: " + incentive);
 
-        // ✅ Update balances
+        //Update balances
         sender.setBalance(sender.getBalance() - amount);
         recipient.setBalance(recipient.getBalance() + amount + incentive);
 
-        // ✅ Save updated users
+        //Save updated users
         userRepository.save(sender);
         userRepository.save(recipient);
 
-        // ✅ Save transaction record
+        //Save transaction record
         TransactionRecord record = new TransactionRecord();
         record.setSender(sender);
         record.setRecipient(recipient);
@@ -81,7 +81,7 @@ public class KafkaTransactionListener {
 
         transactionRecordRepository.save(record);
 
-        System.out.println("✅ Transaction processed and recorded with incentive.");
+        System.out.println("Transaction processed and recorded with incentive.");
     }
 
 
